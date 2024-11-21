@@ -1,23 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
+import { db } from './firebase';
+import { useEffect, useState } from 'react';
+import Header from './Header'
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from './firebase';
 
 function App() {
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    console.log(db)
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* Passando a função setUser como prop para Header */}
+      <Header user={user} setUser={setUser}></Header>
     </div>
   );
 }

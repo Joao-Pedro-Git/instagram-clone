@@ -1,13 +1,54 @@
 import { useEffect, useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from './firebase'; // Mantenha a importação do arquivo firebase.js
+import { storage, ref, uploadBytesResumable, getDownloadURL } from './firebase';
+import firebase from './firebase';
 
 function Header(props) {
+  const [imgURL, setImgURL] = useState(""); // Estado para armazenar o arquivo
+  const [progress, setProgress] = useState(0); // Estado para controle do progresso
+
+  const auth = getAuth(); // Inicializando a instância do Firebase Auth
 
   useEffect(() => {
     console.log('Usuário no Header:', props.user);
   }, [props.user]); // Verifica sempre que o estado do usuário mudar
 
+  function abrirModalPostar(e) {
+    e.preventDefault();
+    const openModal = document.querySelector('.modalUpLoad');
+    const closeModal = document.querySelector('.close-modal-upload');
+    openModal.style.display = "block";
+    closeModal.addEventListener('click', () => {
+      openModal.style.display = "none";
+    });
+  }
+
+  function handleUpLoa(e) {
+    e.preventDefault(); // Impede o envio do formulário e o comportamento padrão (fechar)
+
+    const file = e.target[0]?.files[0];
+    if (!file) return;
+
+    const storageRef = ref(storage, `images/${file.name}`);
+    const upLoadTask = uploadBytesResumable(storageRef, file);
+
+    upLoadTask.on(
+      "state_change",
+      snapshot => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setProgress(progress);
+      },
+      error => {
+        alert(error)
+      },
+      () => {
+        getDownloadURL(upLoadTask.snapshot.ref)
+          .then(url => {
+            setImgURL(url);
+          });
+      }
+    )
+  }
 
   function criarConta(e) {
     e.preventDefault();
@@ -49,7 +90,6 @@ function Header(props) {
       });
   }
 
-
   function abrirModalCriarConta(e) {
     e.preventDefault();
     const openModal = document.querySelector('.modalCriarConta');
@@ -75,6 +115,21 @@ function Header(props) {
         </div>
       </div>
 
+      <div className="modalUpLoad">
+        <div className="formUpLoad">
+          <h2>Fazer Upload!</h2>
+          <div className="close-modal-upload">X</div>
+
+          <form onSubmit={handleUpLoa}>
+            {!imgURL && <progress value={progress} max='100' />}
+            {!imgURL && <img src={imgURL} alt='Imagem' height={200} />}
+            <input id="file-upload" type="file" className="file-upload" />
+            <input type="submit" value="Postar" />
+          </form>
+
+        </div>
+      </div>
+
       <div className="header__logo">
         <a href="#"><img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" alt="Instagram Logo" width="200" /></a>
       </div>
@@ -82,7 +137,7 @@ function Header(props) {
       {props.user ? (
         <div className="header__logadoInfo">
           <span>Olá, <b>{props.user}</b></span>
-          <a href="#">Postar!</a>
+          <a onClick={(e) => abrirModalPostar(e)} href="#">Postar!</a>
         </div>
       ) : (
         <div className="header__loginForm">

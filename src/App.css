@@ -120,69 +120,142 @@ body {
   margin-left: 10px;
 }
 
-.modalCriarConta {
+
+/* Modal Overlay */
+.modalCriarConta,
+.modalUpLoad {
   display: none;
   position: fixed;
   left: 0;
   top: 0;
   height: 100%;
   width: 100%;
-  background-color: rgb(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
 }
 
-.formCriarConta h2 {
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-
-.formCriarConta {
+/* Form Container */
+.formCriarConta,
+.formUpLoad {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  padding: 20px;
-  width: 80%;
-  max-width: 700px;
-  background-color: white;
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   text-align: center;
+  animation: scaleUp 0.3s ease-in-out;
 }
 
-.formCriarConta input {
-  margin-bottom: 10px;
-  width: 100%;
-  height: 25px;
-  border: 1px solid #ccc;
-}
-
-.formCriarConta input[type="text"],
-.formCriarConta input[type="password"] {
-  border-radius: 10px;
-  padding-left: 10px;
-  padding: 15px 10px;
-}
-
-.formCriarConta input[type="submit"] {
-  background-color: #0095f6;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-  transition: 1.2s;
-}
-
-.formCriarConta input[type="submit"]:hover {
-  background-color: #127abe;
-}
-
+/* Close Button */
+.close-modal-upload,
 .close-modal-criar {
   position: absolute;
-  right: -10px;
-  top: -10px;
+  top: 15px;
+  right: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
   cursor: pointer;
+  transition: color 0.2s ease-in-out;
   width: 30px;
-  text-align: center;
-  color: white;
-  line-height: 28px;
   height: 30px;
-  border-radius: 15px;
+  text-align: center;
+  line-height: 28px;
+  border-radius: 50%;
   background-color: #0095f6;
+  color: white;
+}
+
+.close-modal-upload:hover,
+.close-modal-criar:hover {
+  background-color: #007bb5;
+}
+
+/* Form Title */
+.formCriarConta h2,
+.formUpLoad h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Inputs */
+.formCriarConta input[type="text"],
+.formCriarConta input[type="password"],
+.formUpLoad input[type="text"],
+.formUpLoad input[type="file"] {
+  margin-bottom: 15px;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.formCriarConta input[type="text"]:focus,
+.formCriarConta input[type="password"]:focus,
+.formUpLoad input[type="text"]:focus,
+.formUpLoad input[type="file"]:focus {
+  border-color: #007bff;
+}
+
+/* Submit Button */
+.formCriarConta input[type="submit"],
+.formUpLoad input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #0095f6;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.formCriarConta input[type="submit"]:hover,
+.formUpLoad input[type="submit"]:hover {
+  background-color: #007bb5;
+}
+
+/* Progress Bar */
+.formUpLoad progress {
+  width: 100%;
+  height: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  overflow: hidden;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.formUpLoad progress::-webkit-progress-bar {
+  background-color: #f3f3f3;
+}
+
+.formUpLoad progress::-webkit-progress-value {
+  background-color: #0095f6;
+}
+
+/* Animation */
+@keyframes scaleUp {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
 }
